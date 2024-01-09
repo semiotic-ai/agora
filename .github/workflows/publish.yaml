@@ -15,28 +15,30 @@ jobs:
       # (https://github.com/bchr02/node-pre-gyp-github/issues/42)
       fail-fast: false
       matrix:
-        node_version: [18, 19, 20]
-        system:
-          - os: macos-12
-            target: x86_64-apple-darwin
-          - os: macos-13-xlarge
-            target: aarch64-apple-darwin
-          - os: ubuntu-22.04
-            target: x86_64-unknown-linux-gnu
-        include:
-          - node_version: 17
-            system:
-              os: macos-13-xlarge
-              target: aarch64-apple-darwin
-          - node_version: 17
-            system:
-              os: ubuntu-20.04
-              target: x86_64-unknown-linux-gnu
-          - node_version: 17
-            system:
-              os: macos-11
-              target: x86_64-apple-darwin
-    runs-on: ${{ matrix.system.os }}
+        node_version: [17, 18, 19, 20]
+        os: ["ubuntu-latest"]
+        target: ["x86_64-apple-darwin", "aarch64-apple-darwin", "x86_64-unknown-linux-gnu", "aarch64-unknown-linux-gnu"]
+        # system:
+        #   - os: macos-12
+        #     target: x86_64-apple-darwin
+        #   - os: macos-13-xlarge
+        #     target: aarch64-apple-darwin
+        #   - os: ubuntu-22.04
+        #     target: x86_64-unknown-linux-gnu
+        # include:
+        #   - node_version: 17
+        #     system:
+        #       os: macos-13-xlarge
+        #       target: aarch64-apple-darwin
+        #   - node_version: 17
+        #     system:
+        #       os: ubuntu-20.04
+        #       target: x86_64-unknown-linux-gnu
+        #   - node_version: 17
+        #     system:
+        #       os: macos-11
+        #       target: x86_64-apple-darwin
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v2
@@ -44,21 +46,38 @@ jobs:
         uses: actions/setup-node@v2.1.5
         with:
           node-version: ${{ matrix.node_version }}
+
       - name: Setup Rust
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
-          target: ${{ matrix.system.target }}
+          # target: ${{ matrix.system.target }}
           override: true
+
+      - name: Install Linux and Windows Cross Compilers
+        run: sudo apt-get install --yes --no-install-recommends musl-tools gcc-mingw-w64-x86-64-win32
+      - name: Set up MacOS Cross Compiler
+        uses: Timmmm/setup-osxcross@v2
+        with:
+          osx-version: "12.3"
+      - name: Install Rustup targets
+        run: rustup target add x86_64-unknown-linux-musl x86_64-pc-windows-gnu x86_64-apple-darwin aarch64-apple-darwin aarch64-unknown-linux-gnu
       - name: Setup python
         run: python3 -m pip install setuptools
       - name: Install dependencies
         working-directory: ./
         run: yarn install --ignore-scripts
-      - name: Compile binary, test, package, and publish to Github release page
+
+      - name: Compile binary
         env:
-          NODE_PRE_GYP_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CARGO_BUILD_TARGET: ${{ matrix.system.target }}
+          CARGO_BUILD_TARGET: ${{ matrix.target }}
         working-directory: ./
-        run: yarn build-test-pack-publish
+        run: yarn build-release
+
+      # - name: Compile binary, test, package, and publish to Github release page
+      #   env:
+      #     NODE_PRE_GYP_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     CARGO_BUILD_TARGET: ${{ matrix.system.target }}
+      #   working-directory: ./
+      #   run: yarn build-test-pack-publish
