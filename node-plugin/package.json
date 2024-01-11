@@ -1,6 +1,6 @@
 {
   "name": "@graphprotocol/cost-model",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "index.js",
   "types": "index.d.ts",
   "napi": {
@@ -33,5 +33,14 @@
     "test": "ava",
     "universal": "napi universal",
     "version": "napi version"
+  },
+  "optionalDependencies": {
+    "@graphprotocol/cost-model-win32-x64-msvc": "0.0.0",
+    "@graphprotocol/cost-model-darwin-x64": "0.0.0",
+    "@graphprotocol/cost-model-linux-x64-gnu": "0.0.0",
+    "@graphprotocol/cost-model-darwin-arm64": "0.0.0",
+    "@graphprotocol/cost-model-linux-arm64-gnu": "0.0.0",
+    "@graphprotocol/cost-model-linux-arm64-musl": "0.0.0",
+    "@graphprotocol/cost-model-linux-x64-musl": "0.0.0"
   }
 }

@@ -324,10 +324,11 @@ jobs:
       - name: Move artifacts
         run: yarn artifacts
       - name: List packages
-        run: ls -R ./npm
+        run: ls -R ./node-plugin/npm
         shell: bash
       - name: Publish
         run: |
+          cd node-plugin
           npm config set provenance true
           if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
           then
