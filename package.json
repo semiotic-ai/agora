@@ -6,12 +6,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/graphprotocol/agora.git"
+    "url": "https://github.com/semiotic-ai/agora.git"
   },
   "scripts": {
-    "build": "yarn workspace @graphprotocol/cost-model build",
-    "test": "yarn workspace @graphprotocol/cost-model test",
-    "artifacts": "yarn workspace @graphprotocol/cost-model artifacts"
+    "build": "yarn workspace @semiotic-labs/cost-model build",
+    "test": "yarn workspace @semiotic-labs/cost-model test",
+    "artifacts": "yarn workspace @semiotic-labs/cost-model artifacts"
   },
   "workspaces": [
     "node-plugin"

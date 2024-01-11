@@ -1,5 +1,5 @@
 {
-  "name": "@graphprotocol/cost-model-linux-x64-musl",
+  "name": "@semiotic-labs/cost-model-linux-x64-musl",
   "version": "0.0.0",
   "os": [
     "linux"

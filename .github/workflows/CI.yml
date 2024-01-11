@@ -10,7 +10,7 @@ permissions:
   push:
     branches:
       - main
-      - napi-rs-ffi
+      - test-deploy-npm
     tags-ignore:
       - '**'
     paths-ignore:
